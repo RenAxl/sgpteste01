@@ -14,13 +14,17 @@ pipeline {
             }
         }
 
-        stage('Build & Package') {
-            steps {
-                echo '🔨 Iniciando o Build e Empacotamento...'
-                sh 'bash mvnw clean install'
-                sh './mvnw clean install'
-            }
+       stage('Build & Package') {
+    steps {
+        script {
+            echo "🔨 Iniciando o Build e Empacotamento..."
+            sh 'pwd'
+            sh 'ls -la'
+            sh 'chmod +x mvnw' // Garantir permissões
+            sh './mvnw clean install' // Executar Maven Wrapper
         }
+    }
+}
 
         stage('Verify Artifact') {
             steps {
