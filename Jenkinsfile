@@ -7,10 +7,17 @@ environment {
     }
 
     stages {
+
+        stage('Clean Workspace') {
+            steps {
+                echo '🧹 Limpando workspace...'
+                cleanWs()
+    }
+}
         stage('Checkout') {
             steps {
                 echo '📥 Fazendo checkout do código...'
-                git branch: 'main', url: 'https://github.com/RenAxl/sgp-authuser.git'
+                git branch: 'main', url: 'https://github.com/RenAxl/sgpteste01.git'
             }
         }
 
