@@ -54,7 +54,7 @@ environment {
                         // Caminho para o arquivo JAR no servidor Jenkins (WSL)
                         def jarFilePath = '/var/lib/jenkins/workspace/teste03/target/sgp-authuser-0.0.1-SNAPSHOT.jar'
                         // Caminho no destino na instância EC2
-                        def ec2DestinationPath = 'ubuntu@<IP_PUBLICO_EC2>:~/sgp/'
+                        def ec2DestinationPath = 'ubuntu@54.221.141.59:~/sgp/'
         
                         // Comando SCP para transferência do arquivo JAR
                         sh """
