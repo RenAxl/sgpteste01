@@ -47,6 +47,25 @@ environment {
             }
         }
 
+        stage('Deploy to EC2') {
+            steps {
+                sshagent(['sgp-ec2-key']) { // Carrega as credenciais SSH configuradas no Jenkins
+                    script {
+                        // Caminho para o arquivo JAR no servidor Jenkins (WSL)
+                        def jarFilePath = '/var/lib/jenkins/workspace/teste03/target/sgp-authuser-0.0.1-SNAPSHOT.jar'
+                        // Caminho no destino na instância EC2
+                        def ec2DestinationPath = 'ubuntu@<IP_PUBLICO_EC2>:~/sgp/'
+        
+                        // Comando SCP para transferência do arquivo JAR
+                        sh """
+                            scp ${jarFilePath} ${ec2DestinationPath}
+                        """
+                    }
+                }
+            }
+        }
+
+
         stage('Deploy') {
             steps {
                 echo '🚀 Deploy Finalizado. Artefato disponível no diretório target.'
