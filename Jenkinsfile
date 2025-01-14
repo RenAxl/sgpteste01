@@ -58,7 +58,7 @@ environment {
         
                         // Comando SCP para transferência do arquivo JAR
                         sh """
-                            scp ${jarFilePath} ${ec2DestinationPath}
+                            scp -o StrictHostKeyChecking=no ${jarFilePath} ${ec2DestinationPath}
                         """
                     }
                 }
