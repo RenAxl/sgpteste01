@@ -77,6 +77,19 @@ environment {
             }
         }
 
+        stage('Build Docker Image') {
+            steps {
+                sshagent(['sgp-ec2-key']) {
+                    echo '🐳 Construindo imagem Docker na instância EC2...'
+                    sh '''
+                    ssh -o StrictHostKeyChecking=no ubuntu@54.221.141.59 "
+                        cd ~/sgp && \
+                        docker build -t sgp-image .
+                    "
+                    '''
+                }
+            }
+        }
 
         stage('Deploy') {
             steps {
