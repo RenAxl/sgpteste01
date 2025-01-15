@@ -58,6 +58,20 @@ environment {
             }
         }
 
+         stage('Clean Docker Environment') {
+            steps {
+                sshagent(['sgp-ec2-key']) {
+                    echo '🧹 Removendo contêiner e imagem Docker existentes na instância EC2...'
+                    sh '''
+                    ssh -o StrictHostKeyChecking=no ubuntu@54.221.141.59 "
+                        docker rm -f sgp-container || true && \
+                        docker rmi -f sgp-image || true
+                    "
+                    '''
+                }
+            }
+        }
+
         stage('Deploy to EC2') {
             steps {
                 sshagent(['sgp-ec2-key']) { // Carrega as credenciais SSH configuradas no Jenkins
