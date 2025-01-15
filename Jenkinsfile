@@ -58,19 +58,31 @@ environment {
             }
         }
 
-         stage('Clean Docker Environment') {
+        stage('Clean Docker Environment') {
             steps {
                 sshagent(['sgp-ec2-key']) {
-                    echo '🧹 Removendo contêiner e imagem Docker existentes na instância EC2...'
+                    echo '🧹 Verificando e limpando ambiente Docker na instância EC2...'
                     sh '''
                     ssh -o StrictHostKeyChecking=no ubuntu@54.221.141.59 "
-                        docker rm -f sgp-container || true && \
-                        docker rmi -f sgp-image || true
+                        if docker ps -a --format '{{.Names}}' | grep -q '^sgp-container$'; then
+                            echo '📦 Contêiner encontrado. Removendo...'
+                            docker rm -f sgp-container
+                        else
+                            echo '✅ Contêiner não encontrado. Nada para remover.'
+                        fi
+
+                        if docker images --format '{{.Repository}}' | grep -q '^sgp-image$'; then
+                            echo '🖼️ Imagem encontrada. Removendo...'
+                            docker rmi -f sgp-image
+                        else
+                            echo '✅ Imagem não encontrada. Nada para remover.'
+                        fi
                     "
                     '''
                 }
             }
-        }
+}
+
 
         stage('Deploy to EC2') {
             steps {
