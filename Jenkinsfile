@@ -62,14 +62,15 @@ environment {
             steps {
                 sshagent(['sgp-ec2-key']) { // Carrega as credenciais SSH configuradas no Jenkins
                     script {
-                        // Caminho para o arquivo JAR no servidor Jenkins (WSL)
+                        // Caminhos para os arquivos JAR e Dockerfile no servidor Jenkins (WSL)
                         def jarFilePath = '/var/lib/jenkins/workspace/teste03/target/sgp-authuser-0.0.1-SNAPSHOT.jar'
+                        def dockerFilePath = '/var/lib/jenkins/workspace/teste03/Dockerfile'
                         // Caminho no destino na instância EC2
                         def ec2DestinationPath = 'ubuntu@54.221.141.59:~/sgp/'
         
                         // Comando SCP para transferência do arquivo JAR
                         sh """
-                            scp -o StrictHostKeyChecking=no ${jarFilePath} ${ec2DestinationPath}
+                            scp -o StrictHostKeyChecking=no ${jarFilePath} ${dockerFilePath} ${ec2DestinationPath}
                         """
                     }
                 }
