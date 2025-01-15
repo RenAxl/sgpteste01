@@ -91,6 +91,19 @@ environment {
             }
         }
 
+        stage('Run Docker Container') {
+            steps {
+                sshagent(['sgp-ec2-key']) {
+                    echo '▶️ Iniciando container Docker na instância EC2...'
+                    sh '''
+                    ssh -o StrictHostKeyChecking=no ubuntu@54.221.141.59 "
+                        docker run -d --name sgp-container -p 8080:8081 sgp-image
+                    "
+                    '''
+                }
+            }
+        }
+
         stage('Deploy') {
             steps {
                 echo '🚀 Deploy Finalizado. Artefato disponível no diretório target.'
