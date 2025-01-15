@@ -47,6 +47,17 @@ environment {
             }
         }
 
+        stage('Clean EC2 Directory') {
+            steps {
+                sshagent(['sgp-ec2-key']) { // Carrega as credenciais SSH configuradas no Jenkins
+                    echo '🧹 Limpando diretório ~/sgp na instância EC2...'
+                    sh '''
+                    ssh -o StrictHostKeyChecking=no ubuntu@54.221.141.59 "rm -rf ~/sgp/*"
+                    '''
+                }
+            }
+        }
+
         stage('Deploy to EC2') {
             steps {
                 sshagent(['sgp-ec2-key']) { // Carrega as credenciais SSH configuradas no Jenkins
